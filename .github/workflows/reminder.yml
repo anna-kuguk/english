@@ -1,0 +1,31 @@
+# Ежедневное напоминание в Telegram.
+# Работает только после добавления секретов TG_BOT_TOKEN и TG_CHAT_ID (см. README).
+name: Daily reminder
+on:
+  schedule:
+    - cron: "0 16 * * *"   # 16:00 UTC = 19:00 МСК
+  workflow_dispatch: {}
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram reminder
+        env:
+          TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          CHAT: ${{ secrets.TG_CHAT_ID }}
+        run: |
+          if [ -z "$TOKEN" ] || [ -z "$CHAT" ]; then
+            echo "Секреты TG_BOT_TOKEN / TG_CHAT_ID не настроены - пропускаю."
+            exit 0
+          fi
+          MSGS=(
+            "🇬🇧 20 минут English Daily - и день в зачёте. Серия ждёт!"
+            "🔥 Не дай серии прерваться - открой план на сегодня."
+            "📖 Текст дня уже ждёт. 20 минут - и свободна!"
+            "✨ 10 новых слов сегодня = 300 в месяц. Начни с них."
+            "🎙 Сегодня ответь на вопрос дня вслух - это самое весёлое задание."
+          )
+          TEXT="${MSGS[$RANDOM % ${#MSGS[@]}]}"$'\n'"https://anna-kuguk.github.io/english/"
+          curl -s -X POST "https://api.telegram.org/bot${TOKEN}/sendMessage" \
+            -d chat_id="${CHAT}" --data-urlencode text="${TEXT}" > /dev/null
+          echo "Напоминание отправлено."
