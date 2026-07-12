@@ -233,12 +233,13 @@ dialog::backdrop{background:rgba(0,0,0,.45)}
     <select id="setNew"><option>5</option><option selected>10</option><option>15</option></select></div>
   <div class="setrow"><span>Акцент озвучки</span>
     <select id="setAccent"><option value="en-GB">Британский</option><option value="en-US">Американский</option></select></div>
-  <div class="setrow"><span>Напоминание</span>
+  <div class="setrow"><span>Время напоминания</span>
     <span class="row"><input type="time" id="setTime" value="19:00" style="width:110px">
-    <button class="btn soft" id="setNotif">Включить</button></span></div>
-  <p class="small muted">Напоминание сработает, если приложение открыто в браузере. Надёжные пуши в Telegram - инструкция в
-  <a href="https://github.com/anna-kuguk/english#napominaniya" target="_blank" rel="noopener">README</a>.
-  Добавь приложение на главный экран телефона: меню браузера → «Добавить на главный экран».</p>
+    <button class="btn soft" id="setNotif">В браузере</button></span></div>
+  <div class="setrow"><span>Пуш каждый день<br><span class="small muted">через календарь телефона, работает офлайн</span></span>
+    <button class="btn primary" id="icsBtn">📅 В календарь</button></div>
+  <p class="small muted">«В календарь» скачает файл - открой его, и календарь будет напоминать каждый день в выбранное время (без интернета и VPN). Напоминание «в браузере» срабатывает, только пока приложение открыто.
+  Добавь приложение на главный экран телефона: меню браузера → «Добавить на главный экран» - тогда оно работает и без интернета.</p>
   <div class="setrow"><span>Прогресс</span>
     <span class="row"><button class="btn soft" id="expBtn">Скопировать</button>
     <button class="btn soft" id="impBtn">Вставить</button></span></div>

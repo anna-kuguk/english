@@ -356,6 +356,34 @@ App.initSettings = () => {
       App.toast("Напоминания включены"); App.scheduleReminder();
     } else App.toast("Разрешение не выдано");
   };
+  App.$("#icsBtn").onclick = () => {
+    const t = App.$("#setTime").value || "19:00";
+    const [hh, mm] = t.split(":").map(Number);
+    const pad = (n) => String(n).padStart(2, "0");
+    const start = new Date();
+    if (start.getHours() > hh || (start.getHours() === hh && start.getMinutes() >= mm)) start.setDate(start.getDate() + 1);
+    const d = start.getFullYear() + pad(start.getMonth() + 1) + pad(start.getDate());
+    // время без таймзоны (floating) - календарь напомнит в 19:00 по местному, где бы ты ни была
+    const ics = [
+      "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//English Daily//RU", "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      "UID:english-daily@anna-kuguk.github.io",
+      "DTSTAMP:" + d + "T000000Z",
+      "DTSTART:" + d + "T" + pad(hh) + pad(mm) + "00",
+      "DURATION:PT20M",
+      "RRULE:FREQ=DAILY",
+      "SUMMARY:🇬🇧 English Daily - 20 минут английского",
+      "DESCRIPTION:План дня ждёт: https://anna-kuguk.github.io/english/",
+      "URL:https://anna-kuguk.github.io/english/",
+      "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:English Daily - день в зачёт!", "TRIGGER:PT0S", "END:VALARM",
+      "END:VEVENT", "END:VCALENDAR"
+    ].join("\r\n");
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([ics], { type: "text/calendar;charset=utf-8" }));
+    a.download = "english-daily.ics";
+    document.body.appendChild(a); a.click(); a.remove();
+    App.toast("Файл скачан - открой его и подтверди добавление в календарь");
+  };
   App.$("#expBtn").onclick = async () => {
     try { await navigator.clipboard.writeText(JSON.stringify(App.state)); App.toast("Прогресс скопирован в буфер"); }
     catch (e) { prompt("Скопируй вручную:", JSON.stringify(App.state)); }
