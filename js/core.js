@@ -195,6 +195,14 @@ App.speak = (text, rate) => {
   speechSynthesis.speak(u);
 };
 App.recogSupported = () => !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+App.isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+App.srAdvice = () => {
+  const standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  if (App.isIOS()) return standalone
+    ? "На iPhone распознавание не работает из иконки на главном экране - открой сайт в Safari (сама запись работает и здесь)."
+    : "На iPhone распознавание работает в Safari при включённой «Siri и Диктовка» (Настройки → Siri). Иногда отвечает с задержкой - подожди пару секунд.";
+  return "Распознавание речи лучше всего работает в Chrome (Android или компьютер).";
+};
 App.recog = (opts) => {
   const R = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!R) return null;

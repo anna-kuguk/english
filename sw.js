@@ -1,5 +1,5 @@
 /* English Daily - офлайн-кэш. При обновлении файлов увеличь версию. */
-const CACHE = "eng-v2";
+const CACHE = "eng-v3";
 const FILES = [
   ".", "index.html", "manifest.webmanifest", "icon.svg",
   "js/core.js", "js/modules.js",

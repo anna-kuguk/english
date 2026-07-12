@@ -9,7 +9,7 @@
   const topicName = (t) => (window.TOPICS && window.TOPICS[t]) || t;
 
   const pronTest = (word, box) => {
-    if (!App.recogSupported()) { box.innerHTML = '<div class="fb warn small">Распознавание речи не поддерживается этим браузером. Открой в Chrome.</div>'; return; }
+    if (!App.recogSupported()) { box.innerHTML = '<div class="fb warn small">Распознавание речи здесь недоступно. ' + App.esc(App.srAdvice()) + '</div>'; return; }
     box.innerHTML = '<div class="fb info small">🎙 Слушаю... скажи слово вслух</div>';
     const r = App.recog();
     let got = false;
@@ -604,7 +604,7 @@
         };
         rec.onend = () => { if (recording && rec) { try { rec.start(); } catch (e) {} } };
         try { rec.start(); } catch (e) {}
-      } else tr.textContent = "Распознавание речи не поддерживается в этом браузере (лучше всего - Chrome). Запись и таймер работают.";
+      } else tr.textContent = "Транскрипта не будет: " + App.srAdvice() + " Запись, прослушивание себя и таймер работают.";
       if (!media) { // MediaRecorder нет, но SR есть - остановка вручную
         btn.onclick = () => { const secs = (Date.now() - t0) / 1000; stopAll(); recording = false; btn.classList.remove("live"); analyse(secs, App.$(".analysis", c), phrases); };
       }
@@ -639,7 +639,7 @@
       App.$(".skip", row).onclick = () => { i++; step(); };
       App.$(".say", row).onclick = () => {
         const box = App.$(".pr", row);
-        if (!App.recogSupported()) { box.innerHTML = '<div class="fb warn small">Нужен Chrome для распознавания.</div>'; return; }
+        if (!App.recogSupported()) { box.innerHTML = '<div class="fb warn small">' + App.esc(App.srAdvice()) + '</div>'; return; }
         box.innerHTML = '<div class="fb info small">🎙 Слушаю...</div>';
         const r = App.recog(); let done = false;
         r.onresult = (e) => {
